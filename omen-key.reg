@@ -1,0 +1,5 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Software\HP\HP System Event\Bezel Button\8613]
+"ApplicationName"="OMEN Key Remap"
+"ApplicationPath"="C:\\Data\\Bin\\send-home.exe"
