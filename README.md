@@ -28,3 +28,16 @@ To resolve this issue, run `taskschd.msc` and create a basic task:
 Double-click the created task and enable "Run with Highest Privileges".
 
 The default unprivileged auto-start can be disabled in the Start-up tab of Task Manager.
+
+---
+
+## HP OMEN Sequencer Keyboard
+
+This is an external keyboard with the same issue. Instead of a custom system event, the OMEN key on this keyboard sends the standard F24 key code (see #2). It can be remapped to Home by running the following AutoHotkey script in the background:
+
+```autohotkey
+#NoTrayIcon
+F24::Home
+```
+
+Download the compiled executable: [F24ToHome.exe](https://github.com/jingyu9575/remap-omen-key/releases)
