@@ -8,7 +8,7 @@ It is possible to change the function of this key back to Home, by putting a sma
 
 ## Guide
 
-First, the driver "HP System Event Utility" must be installed.
+First, the driver "HP System Event Utility" (with `HPMSGSVC.exe`) must be installed.
 
 Download [send-home.exe](https://github.com/jingyu9575/remap-omen-key/releases) and put it in a fixed location.
 
