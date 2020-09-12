@@ -25,6 +25,8 @@ namespace RemapOMENKey {
 		[DllImport("user32.dll", SetLastError = true)]
 		static extern uint SendInput(uint cInputs,
 			[MarshalAs(UnmanagedType.LPArray), In] KEYBDINPUT[] inputs, int cbSize);
+		[DllImport("user32.dll")]
+		static extern uint MapVirtualKey(uint uCode, uint uMapType);
 
 		readonly ManagementEventWatcher watcher = new ManagementEventWatcher(
 			new ManagementScope(@"\\localhost\root\wmi", null),
@@ -33,11 +35,13 @@ namespace RemapOMENKey {
 		readonly RegistryKey regKey = Registry.ClassesRoot.OpenSubKey(
 			@"CLSID\{60EB195D-B64E-4209-8AB8-53E040061B9C}\SystemEvent");
 
+		const ushort VK_HOME = 0x24;
+
 		readonly KEYBDINPUT[] homeInputs = new KEYBDINPUT[] {
 			new KEYBDINPUT {
 				type = 1, // INPUT_KEYBOARD
-				wVk = 0x24, // VK_HOME
-				dwFlags = 1, // KEYEVENTF_EXTENDEDKEY
+				wVk = VK_HOME,
+				dwFlags = 9, // KEYEVENTF_EXTENDEDKEY | KEYEVENTF_SCANCODE
 				wScan = 0, time = 0, dwExtraInfo = 0,
 				unused1 = 0, unused2 = 0,
 			},
@@ -45,6 +49,7 @@ namespace RemapOMENKey {
 		};
 
 		Program() {
+			homeInputs[0].wScan = (ushort) MapVirtualKey(VK_HOME, 0 /*MAPVK_VK_TO_VSC*/);
 			homeInputs[1] = homeInputs[0];
 			homeInputs[1].dwFlags |= 2; // KEYEVENTF_KEYUP
 			watcher.EventArrived += EventArrived;
@@ -55,6 +60,7 @@ namespace RemapOMENKey {
 			Thread.Sleep(Timeout.Infinite);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031")]
 		void EventArrived(object sender, EventArrivedEventArgs e) {
 			try {
 				if (!4u.Equals(e.NewEvent["eventId"])) return;
