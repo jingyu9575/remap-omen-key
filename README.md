@@ -6,6 +6,8 @@ The Home key on HP OMEN laptops is replaced by a special key that launches the C
 
 It is possible to change the function of this key back to Home, by putting a small program in place of the Command Center link, which simulates the Home key to the operating system.
 
+This branch edits the registry to make the driver start the simulating program. There is [another approach](https://github.com/jingyu9575/remap-omen-key/tree/custom-client) which replaces part of the driver and is more responsive, but it requires importing a certificate. 
+
 ## Guide
 
 First, the driver "HP System Event Utility" (with `HPMSGSVC.exe`) must be installed.
