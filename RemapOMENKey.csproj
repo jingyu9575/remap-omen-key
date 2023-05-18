@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>RemapOMENKey</RootNamespace>
     <AssemblyName>RemapOMENKey</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -77,12 +77,20 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Hp.Ohl.WmiService\HpBiosIntHelper.cs" />
+    <Compile Include="Hp.Ohl.WmiService\Models\EventModels.cs" />
+    <Compile Include="Hp.Ohl.WmiService\Models\HpBiosDataOut.cs" />
+    <Compile Include="Hp.Ohl.WmiService\WmiEventWatcher.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app-UIA.manifest" />
+    <None Include="app-Admin.manifest" />
     <None Include="App.config" />
     <None Include="app.manifest" />
+    <None Include="Hp.Ohl.WmiService\LICENSE" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">
@@ -101,6 +109,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"%25ProgramFiles(x86)%25\Windows Kits\10\bin\10.0.18362.0\x64\signtool.exe" sign /n jingyu9575@codesigning.thucfb.com $(TargetPath)</PostBuildEvent>
+    <PostBuildEvent>set "VSCMD_ARG_HOST_ARCH=x86" &amp; set "VSCMD_ARG_TGT_ARCH=x86" &amp; call "$(DevEnvDir)\..\Tools\vsdevcmd\core\winsdk.bat"
+copy "$(TargetPath)" "$(TargetDir)$(TargetName)-Admin.exe"
+mt.exe -nologo -outputresource:"$(TargetDir)$(TargetName)-Admin.exe";#1 -manifest "$(ProjectDir)app-Admin.manifest"
+copy "$(TargetPath)" "$(TargetDir)$(TargetName)-uia.exe"
+mt.exe -nologo -outputresource:"$(TargetDir)$(TargetName)-UIA.exe";#1 -manifest "$(ProjectDir)app-UIA.manifest"
+signtool.exe sign /fd sha1 /n jingyu9575@codesigning.thucfb.com "$(TargetDir)$(TargetName)-UIA.exe"
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
